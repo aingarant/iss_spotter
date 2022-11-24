@@ -1,5 +1,5 @@
 const request = require("request");
-const fetchIpUrl = `https://api.ipify.org?format=js`;
+const fetchIpUrl = `https://api.ipify.org?format=json`;
 const ipWhoIsUrl = `http://ipwho.is/`;
 const flyOverUrl = `https://iss-flyover.herokuapp.com/json/?`;
 
@@ -17,7 +17,7 @@ const fetchMyIP = (callback) => {
       callback(Error(msg), null);
       return;
     }
-    callback(error, body);
+    callback(error, JSON.parse(body).ip);
   });
 };
 
@@ -52,7 +52,7 @@ const fetchCoordsByIP = (ip, callback) => {
 };
 
 const fetchISSFlyOverTimes = (coords, callback) => {
-  const url = `https://iss-flyover.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`;
+  const url = `${flyOverUrl}lat=${coords.latitude}&lon=${coords.longitude}`;
 
   request(url, (error, response, body) => {
     const data = JSON.parse(response.body);
